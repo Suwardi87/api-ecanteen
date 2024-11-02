@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function index()
     {
         // select all,select paginate and search
-        $categories = Categories::when(request()->search, function ($query){
+        $categories = Categories::when(request()->search, function ($query) {
             $query->where('name', 'like', '%' . request()->search . '%');
         })->latest()->paginate(10);
 
@@ -23,18 +23,20 @@ class CategoryController extends Controller
         $categories->appends(['search' => request()->search]);
 
         if ($categories->isEmpty()) {
-            return new ResponseResource(true, 'Categories not available', null, [
-                'code' => 200
-            ], 200);
+            return new ResponseResource(
+                true,
+                'Categories not available',
+                null,
+                ['code' => 200],
+                 200);
         }
 
         return new ResponseResource(
             true,
             'List Data Categories',
             $categories,
-            [
-                'total_categories' => $categories->count(),
-            ]
+            ['total_categories' => $categories->count(),],
+            200
         );
     }
 
@@ -100,7 +102,7 @@ class CategoryController extends Controller
     public function update(Request $request, string $uuid)
     {
         $data = $request->validate([
-            'name' => 'required|string|min:3|max:255|unique:categories,name,'. $uuid . ',uuid',
+            'name' => 'required|string|min:3|max:255|unique:categories,name,' . $uuid . ',uuid',
         ]);
 
         try {
@@ -152,11 +154,15 @@ class CategoryController extends Controller
                 'code' => 200
             ], 200);
         } catch (\Exception $e) {
-            return new ResponseResource(false, $e->getMessage(), null, [
-                'code' => 500
-            ], 500);
+            return new ResponseResource(
+                false,
+                $e->getMessage(),
+                null,
+                [
+                    'code' => 500
+                ],
+                500
+            );
         }
     }
-
 }
-
