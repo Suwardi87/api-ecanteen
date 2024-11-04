@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SupplierRequest extends FormRequest
+class TransactionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,13 +21,9 @@ class SupplierRequest extends FormRequest
      */
     public function rules(): array
     {
-        $routeId = $this->route('supplier');
         return [
-            'code' => 'required|string|max:255|unique:suppliers,code,'.$routeId.',uuid',
-            'name' => 'required|string|max:255',
-            'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:15',
-            'email' => 'required|email|max:255|unique:suppliers,email,'.$routeId.',uuid',
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|numeric',
         ];
     }
 }

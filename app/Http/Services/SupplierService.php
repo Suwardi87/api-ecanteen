@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Support\Str;
 
@@ -23,9 +24,13 @@ class SupplierService
         return $suppliers;
     }
 
-    public function getbyfirst(string $column, string $value)
+    public function getByFirst(string $column, string $value, bool $relation = false)
     {
-        return Supplier::where($column, $value)->first();
+        if ($relation) {
+            return Product::where($column, $value)->with('category:id,name', 'supplier:id,name')->first();
+        }
+
+        return Product::where($column, $value)->first();
     }
     public function createSupplier($supplier){
         $supplier['slug'] = Str::slug($supplier['name']);
