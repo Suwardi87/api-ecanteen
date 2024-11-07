@@ -56,6 +56,13 @@ class OrderTransactionService
         return OrderTransaction::create($data);
     }
 
+    public function getByStudent($id)
+    {
+        return OrderTransaction::where('student_id', $id)
+            ->with('student:id,name', 'product:id,name')
+            ->latest()->get();
+    }
+
     public function update(array $data, string $uuid, int $product_id)
     {
         // get product
